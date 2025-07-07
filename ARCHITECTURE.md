@@ -406,4 +406,247 @@ graph TB
     API --> Storage
 ```
 
+## PCB Layout Automation
+
+### 1. Layout Engine Core
+- AI-driven component placement based on historical data
+- Multi-stage routing optimization
+- Real-time DRC checking
+- EMI/EMC analysis and optimization
+- Thermal analysis and management
+
+### 2. Board-Specific Layout Considerations
+
+#### Energy Recovery Board (Highest Complexity)
+- High current paths optimization
+- EMI shielding for AC-DC conversion
+- Thermal management for power components
+- Isolation between power and control circuits
+- Critical component placement:
+  - Power MOSFETs
+  - Filter capacitors
+  - Current sensing
+  - Gate drivers
+
+#### Battery Management Board
+- High current charging paths
+- Cell balancing circuit layout
+- Temperature sensor placement
+- Protection circuit placement
+- Isolation considerations:
+  - Control/power separation
+  - Sensing circuit isolation
+  - Communication circuit isolation
+
+#### Motor Control Board
+- FOC driver layout optimization
+- Power stage component placement
+- Hall sensor signal routing
+- High-speed signal considerations:
+  - Differential pair routing
+  - Length matching
+  - Impedance control
+
+#### Main Control Board
+- User interface component placement
+- Power management circuit layout
+- Communication interface routing
+- General considerations:
+  - Ground plane design
+  - Power plane segmentation
+  - Signal integrity
+
+### 3. Layout Automation Workflow
+
+```mermaid
+graph TB
+    subgraph "Layout Engine"
+        subgraph "Input Processing"
+            Schematic["Schematic Data"]
+            Rules["Design Rules"]
+            Constraints["Layout Constraints"]
+            Historical["Historical Layout Data"]
+            AI["AI Layout Models"]
+        end
+
+        subgraph "Layout Analysis"
+            PowerAnalysis["Power Distribution<br/>Analysis"]
+            ThermalAnalysis["Thermal Analysis"]
+            SignalAnalysis["Signal Integrity<br/>Analysis"]
+            EMIAnalysis["EMI/EMC Analysis"]
+        end
+
+        subgraph "Component Placement"
+            Critical["Critical Component<br/>Placement"]
+            PowerComp["Power Component<br/>Placement"]
+            Sensitive["Sensitive Signal<br/>Placement"]
+            General["General Component<br/>Placement"]
+        end
+
+        subgraph "Routing Stages"
+            PowerRoutes["Power Distribution<br/>Routes"]
+            DiffPairs["Differential Pairs"]
+            CriticalSignals["Critical Signals"]
+            GeneralRoutes["General Routes"]
+            Cleanup["Route Cleanup &<br/>Optimization"]
+        end
+    end
+
+    Schematic --> PowerAnalysis
+    Rules --> PowerAnalysis
+    Constraints --> PowerAnalysis
+    Historical --> AI
+    AI --> Critical
+    
+    PowerAnalysis --> PowerComp
+    ThermalAnalysis --> PowerComp
+    SignalAnalysis --> Sensitive
+    EMIAnalysis --> Sensitive
+
+    PowerComp --> PowerRoutes
+    Critical --> DiffPairs
+    Sensitive --> CriticalSignals
+    General --> GeneralRoutes
+    
+    PowerRoutes --> Cleanup
+    DiffPairs --> Cleanup
+    CriticalSignals --> Cleanup
+    GeneralRoutes --> Cleanup
+```
+
+### 4. E-Bike System Layout
+
+```mermaid
+graph TB
+    subgraph "E-Bike PCB System"
+        subgraph "Energy Recovery Board"
+            ER_Power["Power Stage<br/>AC-DC-DC"]
+            ER_Control["Control Circuit"]
+            ER_Sensing["Current/Voltage<br/>Sensing"]
+            ER_MCU["ESP32C3 MCU"]
+        end
+
+        subgraph "Battery Management"
+            BMS_Power["Charging Circuit"]
+            BMS_Balance["Cell Balancing"]
+            BMS_Protect["Protection Circuit"]
+            BMS_MCU["ESP32C3 MCU"]
+        end
+
+        subgraph "Motor Control"
+            FOC["FOC Driver Stage"]
+            MC_Power["Power Stage"]
+            MC_Sensing["Hall/Position<br/>Sensing"]
+            MC_MCU["ESP32S3 MCU"]
+        end
+
+        subgraph "Main Control"
+            UI["User Interface"]
+            Power_Mgmt["Power Management"]
+            Comms["Communication"]
+            Main_MCU["ESP32S3 MCU"]
+        end
+    end
+
+    ER_Power --> ER_Sensing
+    ER_Sensing --> ER_MCU
+    ER_MCU --> ER_Control
+    
+    BMS_Power --> BMS_Balance
+    BMS_Balance --> BMS_Protect
+    BMS_Protect --> BMS_MCU
+    
+    FOC --> MC_Power
+    MC_Power --> MC_Sensing
+    MC_Sensing --> MC_MCU
+    
+    UI --> Main_MCU
+    Main_MCU --> Power_Mgmt
+    Main_MCU --> Comms
+```
+
+### 5. Layout Priority Rules
+
+```mermaid
+graph TB
+    subgraph "Layout Priority Workflow"
+        Start["Start Layout"]
+        
+        subgraph "Power Distribution (80%)"
+            Power["Power Planning"]
+            Ground["Ground Planning"]
+            Current["Current Path<br/>Optimization"]
+            Thermal["Thermal Management"]
+        end
+        
+        subgraph "Signal Integrity (15%)"
+            HighSpeed["High-Speed Signals"]
+            Diff["Differential Pairs"]
+            Length["Length Matching"]
+            EMI["EMI Protection"]
+        end
+        
+        subgraph "General Routing (5%)"
+            Control["Control Signals"]
+            Support["Support Components"]
+            Mechanical["Mechanical<br/>Considerations"]
+        end
+        
+        DRC["Design Rule Check"]
+        End["Layout Complete"]
+    end
+    
+    Start --> Power
+    Power --> Ground
+    Ground --> Current
+    Current --> Thermal
+    
+    Thermal --> HighSpeed
+    HighSpeed --> Diff
+    Diff --> Length
+    Length --> EMI
+    
+    EMI --> Control
+    Control --> Support
+    Support --> Mechanical
+    
+    Mechanical --> DRC
+    DRC --> End
+```
+
+1. Power Distribution (80% of layout time)
+   - High current paths
+   - Power plane design
+   - Ground plane optimization
+   - Thermal considerations
+
+2. Signal Integrity (15% of layout time)
+   - Critical signal routing
+   - Differential pairs
+   - Length matching
+   - EMI/EMC considerations
+
+3. General Routing (5% of layout time)
+   - Non-critical signals
+   - Support components
+   - Mechanical considerations
+
+### 6. AI-Assisted Layout Features
+
+- Learning from existing successful layouts
+- Component placement optimization
+- Route pattern recognition
+- Design rule validation
+- Thermal pattern analysis
+- EMI hotspot prediction
+
+### 7. Manufacturing Considerations
+
+- Layer stackup optimization
+- Impedance control
+- Via placement and types
+- Copper balance
+- Thermal relief
+- Test point accessibility
+
 This expanded architecture provides a comprehensive view of the system's capabilities and interactions. Each component is designed to be modular and scalable, allowing for future enhancements and optimizations.
